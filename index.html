@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Revision Café — Effective Introductions</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#121a23;
+      --card2:#0f1720;
+      --text:#eef3fb;
+      --muted:#b9c6d6;
+
+      /* Writer’s Café-ish: teal + rose */
+      --teal:#31d7c3;
+      --teal2:#1aaea0;
+      --rose:#ff4fa6;
+      --rose2:#ff7bbf;
+
+      --good:#2dd4bf;
+      --bad:#fb7185;
+
+      --shadow: 0 12px 28px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 450px at 15% 15%, rgba(49,215,195,.18), transparent 60%),
+        radial-gradient(900px 450px at 85% 25%, rgba(255,79,166,.14), transparent 55%),
+        linear-gradient(180deg, #070a0f 0%, #0a0f16 45%, #06080c 100%);
+      height:100vh;
+      overflow:hidden; /* keep everything on one screen */
+    }
+
+    /* Top banner */
+    .topbar{
+      position:relative;
+      padding:14px 18px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:260px;
+    }
+    .title{
+      font-weight:900;
+      letter-spacing:.3px;
+      font-size:20px;
+      line-height:1.05;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .title-badge{
+      padding:6px 10px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(49,215,195,.18), rgba(255,79,166,.18));
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+    .handle{
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.4px;
+      opacity:.9;
+    }
+
+    /* Animated “stickers” */
+    .stickers{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      padding-top:2px;
+    }
+    .sticker{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+      font-size:12px;
+      color:rgba(255,255,255,.86);
+      user-select:none;
+    }
+    .steam{
+      font-size:16px;
+      filter: drop-shadow(0 0 8px rgba(255,79,166,.25));
+      animation: floatUp 2.4s ease-in-out infinite;
+    }
+    .steam:nth-child(2){ animation-delay:.35s; filter: drop-shadow(0 0 8px rgba(49,215,195,.25));}
+    .steam:nth-child(3){ animation-delay:.7s; filter: drop-shadow(0 0 8px rgba(255,79,166,.25));}
+    @keyframes floatUp{
+      0%{ transform: translateY(0); opacity:.9;}
+      50%{ transform: translateY(-6px); opacity:1;}
+      100%{ transform: translateY(0); opacity:.9;}
+    }
+
+    /* Main layout */
+    .wrap{
+      height: calc(100vh - 62px);
+      padding: 0 18px 16px;
+      display:grid;
+      grid-template-columns: 38% 62%;
+      gap:14px;
+      align-items:stretch;
+    }
+
+    .panel{
+      background: rgba(18,26,35,.72);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-height:0;
+    }
+
+    /* Left: Scrollable passage */
+    .passageHead{
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background:
+        linear-gradient(90deg, rgba(49,215,195,.13), rgba(255,79,166,.12));
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .passageHead .h{
+      font-weight:900;
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .hint{
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      opacity:.95;
+    }
+    .scrollBox{
+      height:100%;
+      padding:12px 14px 16px;
+      overflow:auto; /* scroll only here */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.18) transparent;
+    }
+    .scrollBox::-webkit-scrollbar{width:10px}
+    .scrollBox::-webkit-scrollbar-thumb{
+      background: rgba(255,255,255,.14);
+      border-radius:10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+    .passageTitle{
+      font-weight:900;
+      font-size:16px;
+      margin:0 0 8px;
+    }
+    .passageText{
+      color:rgba(255,255,255,.88);
+      font-size:13px;
+      line-height:1.45;
+      white-space:pre-wrap;
+      margin:0 0 12px;
+    }
+    .question{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(15,23,32,.75);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .question .q{
+      font-weight:900;
+      font-size:13px;
+      margin-bottom:6px;
+    }
+    .question .sub{
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    /* Right: activity */
+    .activityHead{
+      padding:12px 14px;
+      background:
+        linear-gradient(90deg, rgba(255,79,166,.15), rgba(49,215,195,.12));
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .activityHead .h{
+      font-weight:900;
+      font-size:14px;
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      cursor:pointer;
+      font-weight:900;
+      border-radius:999px;
+      padding:10px 12px;
+      font-size:12px;
+      letter-spacing:.2px;
+      transition: transform .08s ease, filter .15s ease;
+      user-select:none;
+    }
+    button:active{ transform: scale(.98); }
+    .btnCheck{
+      background: linear-gradient(90deg, var(--teal), var(--rose));
+      color:#081018;
+      box-shadow: 0 14px 28px rgba(49,215,195,.12);
+    }
+    .btnReset{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(255,255,255,.88);
+    }
+    .score{
+      color:rgba(255,255,255,.86);
+      font-size:12px;
+      font-weight:900;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .activityBody{
+      height: calc(100% - 56px);
+      padding: 12px 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:0;
+    }
+
+    /* Answer choices row */
+    .choicesRow{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    .choiceCard{
+      background: rgba(15,23,32,.75);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding:10px 10px 9px;
+      min-height:70px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      box-shadow: 0 10px 18px rgba(0,0,0,.22);
+    }
+    .letter{
+      width:28px;
+      height:28px;
+      border-radius:10px;
+      flex:0 0 28px;
+      display:grid;
+      place-items:center;
+      font-weight:1000;
+      color:#081018;
+      background: linear-gradient(180deg, rgba(255,79,166,.92), rgba(255,123,191,.92));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 18px rgba(255,79,166,.12);
+    }
+    .choiceText{
+      font-size:12px;
+      line-height:1.3;
+      color:rgba(255,255,255,.90);
+      font-weight:750;
+    }
+
+    /* Drop zones under choices */
+    .dropsRow{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    .dropZone{
+      background: rgba(18,26,35,.55);
+      border:1.8px dashed rgba(255,255,255,.18);
+      border-radius:16px;
+      min-height:88px;
+      padding:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color: rgba(255,255,255,.70);
+      font-size:12px;
+      font-weight:850;
+      transition: border-color .15s ease, background .15s ease, transform .08s ease;
+      position:relative;
+    }
+    .dropZone.dragOver{
+      border-color: rgba(49,215,195,.85);
+      background: rgba(49,215,195,.10);
+      transform: translateY(-1px);
+    }
+    .dropZone.filled{
+      border-style: solid;
+      border-color: rgba(255,255,255,.14);
+      background: rgba(15,23,32,.78);
+      color: rgba(255,255,255,.92);
+      text-align:left;
+      justify-content:flex-start;
+    }
+    .dropZone.good{
+      outline: 2px solid rgba(45,212,191,.55);
+      box-shadow: 0 0 0 6px rgba(45,212,191,.08);
+    }
+    .dropZone.bad{
+      outline: 2px solid rgba(251,113,133,.55);
+      box-shadow: 0 0 0 6px rgba(251,113,133,.08);
+    }
+
+    /* Rationale bank */
+    .bankWrap{
+      margin-top:auto;
+      background: rgba(15,23,32,.70);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 18px;
+      padding:10px;
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .bankHead{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .bankHead .h{
+      font-weight:1000;
+      font-size:12px;
+      letter-spacing:.25px;
+      color: rgba(255,255,255,.92);
+    }
+    .bankHead .mini{
+      font-size:12px;
+      font-weight:800;
+      color: rgba(255,255,255,.70);
+    }
+    .bank{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:stretch;
+    }
+    .rationale{
+      flex: 1 1 calc(50% - 10px);
+      min-width: 240px;
+      background: rgba(18,26,35,.78);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding:10px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.20);
+      cursor:grab;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .rationale:active{ cursor:grabbing; }
+    .rationale .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      font-weight:1000;
+      color: rgba(255,255,255,.86);
+      padding:6px 9px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:8px;
+    }
+    .rationale .txt{
+      font-size:12px;
+      line-height:1.3;
+      font-weight:800;
+      color: rgba(255,255,255,.90);
+    }
+    .rationale .spark{
+      position:absolute;
+      right:-10px;
+      top:-14px;
+      font-size:34px;
+      opacity:.14;
+      transform: rotate(12deg);
+      filter: drop-shadow(0 0 10px rgba(49,215,195,.16));
+      pointer-events:none;
+    }
+
+    /* Small screens */
+    @media (max-width: 980px){
+      body{ overflow:auto; height:auto; }
+      .wrap{
+        height:auto;
+        grid-template-columns:1fr;
+        overflow:visible;
+      }
+      .panel{ min-height: 420px; }
+      .activityBody{ height:auto; }
+      .choicesRow, .dropsRow{ grid-template-columns:1fr; }
+      .rationale{ min-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="title">
+        Revision Café Shorts — Effective Introductions
+        <span class="title-badge">Drag & Drop</span>
+      </div>
+      <div class="handle">@WritersCafe208</div>
+    </div>
+
+    <div class="stickers" aria-hidden="true">
+      <div class="sticker">
+        <span class="steam">☕</span><span class="steam">💨</span><span class="steam">💨</span>
+        <span style="font-weight:900; opacity:.9;">Café Mode</span>
+      </div>
+      <div class="sticker">
+        <span style="font-size:16px;">✨</span>
+        <span style="font-weight:900; opacity:.9;">Glow-Up Check</span>
+      </div>
+      <div class="sticker">
+        <span style="font-size:16px;">🧠</span>
+        <span style="font-weight:900; opacity:.9;">STAAR Prep</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- LEFT: passage -->
+    <section class="panel" role="region" aria-label="Passage and question">
+      <div class="passageHead">
+        <div class="h">Read the passage</div>
+        <div class="hint">Scroll here only ↕️</div>
+      </div>
+      <div class="scrollBox">
+        <div class="passageTitle">Keeping Local Stories Alive</div>
+        <pre class="passageText">(1) Every community has stories that reveal something special about its identity. (2) Some tales highlight challenges families once faced, while others celebrate traditions that helped shape the town’s character. (3) Although these stories may be from long ago, many residents believe they should still be shared today.
+(4) One way communities keep their stories alive is through local museums. (5) These museums collect photographs, letters, clothing, and tools that belonged to people who lived in the area many years ago. (6) Visitors can walk through exhibits and learn how daily life has changed over time.
+(7) Another method of preserving history is hosting community events. (8) Some towns organize annual festivals that celebrate foods, dances, or customs from their past. (9) These events allow younger generations to experience traditions firsthand and understand how they connect to the present.
+(10) In addition to museums and festivals, storytelling workshops have become popular. (11) During these workshops, older residents share memories while students and volunteers record them. (12) This helps ensure that important moments and voices are saved so future generations can learn from them.</pre>
+
+        <div class="question">
+          <div class="q">Question</div>
+          <div class="sub">Which sentence should be added <b>BEFORE</b> sentence 1 to make the introduction more effective?</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: activity -->
+    <section class="panel" role="region" aria-label="Drag and drop activity">
+      <div class="activityHead">
+        <div class="h">Match each rationale to the correct answer choice</div>
+        <div class="controls">
+          <span class="score" id="scorePill">Score: —</span>
+          <button class="btnCheck" id="checkBtn">Check Answers</button>
+          <button class="btnReset" id="resetBtn">Reset</button>
+        </div>
+      </div>
+
+      <div class="activityBody">
+        <!-- Answer choices -->
+        <div class="choicesRow" aria-label="Answer choices">
+          <div class="choiceCard">
+            <div class="letter">A</div>
+            <div class="choiceText">Many towns across the country compete to see who can draw the most visitors to their annual food festivals.</div>
+          </div>
+          <div class="choiceCard">
+            <div class="letter">B</div>
+            <div class="choiceText">Stories are important to every part of life, including movies, books, and even video games.</div>
+          </div>
+          <div class="choiceCard">
+            <div class="letter">C</div>
+            <div class="choiceText">Communities often use different methods to preserve their history and pass it on to future generations.</div>
+          </div>
+          <div class="choiceCard">
+            <div class="letter">D</div>
+            <div class="choiceText">For example, one local rancher once saved a town’s parade by bringing extra horses at the last minute.</div>
+          </div>
+        </div>
+
+        <!-- Drop zones -->
+        <div class="dropsRow" aria-label="Rationale drop zones">
+          <div class="dropZone" data-choice="A">Drop A’s rationale here</div>
+          <div class="dropZone" data-choice="B">Drop B’s rationale here</div>
+          <div class="dropZone" data-choice="C">Drop C’s rationale here</div>
+          <div class="dropZone" data-choice="D">Drop D’s rationale here</div>
+        </div>
+
+        <!-- Rationale bank -->
+        <div class="bankWrap">
+          <div class="bankHead">
+            <div class="h">Rationale Cards (drag to match)</div>
+            <div class="mini">Tip: If it’s too detailed / too general / off topic, it’s a distractor.</div>
+          </div>
+          <div class="bank" id="bank">
+            <div class="rationale" draggable="true" data-correct="A" id="ratA">
+              <div class="spark">✨</div>
+              <div class="tag">❌ Rationale</div>
+              <div class="txt">This sentence is too specific for an introduction. It includes detailed information about food festivals that belongs in the body of the passage, not in the opening.</div>
+            </div>
+
+            <div class="rationale" draggable="true" data-correct="B" id="ratB">
+              <div class="spark">✨</div>
+              <div class="tag">❌ Rationale</div>
+              <div class="txt">This sentence is too general and does not connect to the passage’s focus on preserving community history.</div>
+            </div>
+
+            <div class="rationale" draggable="true" data-correct="C" id="ratC">
+              <div class="spark">✨</div>
+              <div class="tag">✔️ Rationale</div>
+              <div class="txt">This sentence introduces the main idea and leads logically into the passage, which explains different ways communities keep local stories alive.</div>
+            </div>
+
+            <div class="rationale" draggable="true" data-correct="D" id="ratD">
+              <div class="spark">✨</div>
+              <div class="tag">❌ Rationale</div>
+              <div class="txt">This sentence is too specific for an introduction. It presents a detailed example that belongs later in the passage, not before sentence 1.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ---- Drag & Drop logic (single-screen) ----
+    const zones = Array.from(document.querySelectorAll('.dropZone'));
+    const cards = Array.from(document.querySelectorAll('.rationale'));
+    const bank = document.getElementById('bank');
+    const scorePill = document.getElementById('scorePill');
+
+    let draggedId = null;
+
+    function clearZoneStyles(){
+      zones.forEach(z=>{
+        z.classList.remove('dragOver','good','bad');
+      });
+    }
+
+    cards.forEach(card=>{
+      card.addEventListener('dragstart', (e)=>{
+        draggedId = card.id;
+        e.dataTransfer.setData('text/plain', card.id);
+        // nicer drag image offset
+        e.dataTransfer.effectAllowed = 'move';
+      });
+    });
+
+    zones.forEach(zone=>{
+      zone.addEventListener('dragover', (e)=>{
+        e.preventDefault();
+        zone.classList.add('dragOver');
+      });
+      zone.addEventListener('dragleave', ()=>{
+        zone.classList.remove('dragOver');
+      });
+      zone.addEventListener('drop', (e)=>{
+        e.preventDefault();
+        zone.classList.remove('dragOver');
+
+        const id = e.dataTransfer.getData('text/plain') || draggedId;
+        if(!id) return;
+        const card = document.getElementById(id);
+        if(!card) return;
+
+        // If zone already has a card, send it back to bank
+        const existing = zone.querySelector('.rationale');
+        if(existing){
+          bank.appendChild(existing);
+          existing.style.flex = '';
+        }
+
+        zone.textContent = ''; // clear placeholder text
+        zone.appendChild(card);
+        zone.classList.add('filled');
+        // ensure card fits nicely inside the zone
+        card.style.flex = '1 1 auto';
+      });
+    });
+
+    // Allow dropping back into bank
+    bank.addEventListener('dragover', (e)=>{ e.preventDefault(); });
+    bank.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain') || draggedId;
+      if(!id) return;
+      const card = document.getElementById(id);
+      if(!card) return;
+      bank.appendChild(card);
+      card.style.flex = '';
+      // If it came from a zone, restore that zone placeholder if empty
+      zones.forEach(z=>{
+        if(z.classList.contains('filled') && z.children.length === 0){
+          z.classList.remove('filled');
+          z.textContent = `Drop ${z.dataset.choice}’s rationale here`;
+        }
+      });
+    });
+
+    // Check answers
+    document.getElementById('checkBtn').addEventListener('click', ()=>{
+      clearZoneStyles();
+      let correct = 0;
+      let totalPlaced = 0;
+
+      zones.forEach(zone=>{
+        const choice = zone.dataset.choice;
+        const card = zone.querySelector('.rationale');
+
+        if(card){
+          totalPlaced++;
+          const shouldBe = card.dataset.correct;
+          if(shouldBe === choice){
+            correct++;
+            zone.classList.add('good');
+          }else{
+            zone.classList.add('bad');
+          }
+        }else{
+          // unfilled zone - neutral
+        }
+      });
+
+      scorePill.textContent = `Score: ${correct}/4`;
+      // subtle wiggle if not perfect
+      if(correct < 4){
+        scorePill.animate(
+          [{transform:'translateX(0)'},{transform:'translateX(-3px)'},{transform:'translateX(3px)'},{transform:'translateX(-2px)'},{transform:'translateX(2px)'},{transform:'translateX(0)'}],
+          {duration:380, iterations:1}
+        );
+      }else{
+        scorePill.animate(
+          [{transform:'scale(1)'},{transform:'scale(1.04)'},{transform:'scale(1)'}],
+          {duration:260, iterations:1}
+        );
+      }
+    });
+
+    // Reset
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      scorePill.textContent = 'Score: —';
+      clearZoneStyles();
+
+      // Move all cards back to bank
+      cards.forEach(card=>{
+        bank.appendChild(card);
+        card.style.flex = '';
+      });
+
+      // Reset zones
+      zones.forEach(zone=>{
+        zone.classList.remove('filled','good','bad','dragOver');
+        zone.textContent = `Drop ${zone.dataset.choice}’s rationale here`;
+      });
+    });
+  </script>
+</body>
+</html>
